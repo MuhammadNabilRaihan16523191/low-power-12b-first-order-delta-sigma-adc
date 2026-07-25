@@ -129,9 +129,9 @@ C {vsource.sym} -440 -1140 0 0 {name=V3 value=0.65 savecurrent=false}
 C {gnd.sym} -440 -1090 0 0 {name=l7 lab=0}
 C {vsource.sym} -180 -1140 0 0 {name=V4 value=2.5 savecurrent=false}
 C {gnd.sym} -180 -1090 0 0 {name=l8 lab=0}
-C {vsource.sym} -880 -860 0 0 {name=V5 value="SIN(1.65 0.125 2k 0 0 0)" savecurrent=false}
+C {vsource.sym} -880 -860 0 0 {name=V5 value="PULSE(1.4 1.9 0 1n 1n 5u 10m)" savecurrent=false}
 C {gnd.sym} -880 -810 0 0 {name=l9 lab=0}
-C {vsource.sym} -660 -860 0 0 {name=V6 value="SIN(1.65 0.125 2k 0 0 180)" savecurrent=false}
+C {vsource.sym} -660 -860 0 0 {name=V6 value="PULSE(1.9 1.4 0 1n 1n 5u 10m)" savecurrent=false}
 C {gnd.sym} -660 -810 0 0 {name=l10 lab=0}
 C {vsource.sym} -440 -860 0 0 {name=V7 value="PULSE(0 3.3 0 1n 1n 36.69n 81.38n)" savecurrent=false}
 C {gnd.sym} -440 -810 0 0 {name=l11 lab=0}
@@ -178,7 +178,7 @@ Rd2 clk2  0 1meg
 .control
 set color0=white
 set color1=black
-tran 1u 5u
+tran 1u 50u
 let vicm_ota = (v(Vp)+v(Vm))/2
 let vid_ota  = v(Vp)-v(Vm)
 * --- window ala paper ---
