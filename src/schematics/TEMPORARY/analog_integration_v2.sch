@@ -82,8 +82,12 @@ N -970 -450 -970 -410 {lab=VCM}
 N -970 -350 -970 -330 {lab=0}
 N 890 -667.5 932.5 -667.5 {lab=#net5}
 N 890 -643.75 932.5 -643.75 {lab=#net6}
-N 992.5 -667.5 1040 -667.5 {lab=Vop}
-N 992.5 -643.75 1040 -643.75 {lab=Vom}
+N 992.5 -667.5 1040 -667.5 {lab=#net5}
+N 992.5 -643.75 1040 -643.75 {lab=#net6}
+N 932.5 -643.75 992.5 -643.75 {lab=#net6}
+N 932.5 -667.5 992.5 -667.5 {lab=#net5}
+N 1100 -667.5 1160 -667.5 {lab=Vop}
+N 1100 -643.75 1160 -643.75 {lab=Vom}
 C {symbols/nfet_03v3.sym} 210 -1010 2 1 {name=M1
 L=0.3u
 W=7.5u
@@ -142,7 +146,7 @@ spiceprefix=X
 }
 C {capa.sym} 340 -840 1 1 {name=C1
 m=1
-value=50pf
+value=50pF
 footprint=1206
 device="ceramic capacitor"}
 C {ipin.sym} 80 -840 0 0 {name=p3 lab=Vin+}
@@ -206,7 +210,7 @@ spiceprefix=X
 }
 C {capa.sym} 340 -460 1 0 {name=C3
 m=1
-value=50pf
+value=50pF
 footprint=1206
 device="ceramic capacitor"}
 C {ipin.sym} 80 -460 2 1 {name=p6 lab=Vin-}
@@ -224,16 +228,16 @@ C {lab_pin.sym} 240 -290 2 0 {name=p19 sig_type=std_logic lab=VSS}
 C {lab_pin.sym} 400 -290 0 0 {name=p20 sig_type=std_logic lab=VSS}
 C {capa.sym} 780 -840 3 0 {name=C5
 m=1
-value=300pf
+value=50pF
 footprint=1206
 device="ceramic capacitor"}
 C {capa.sym} 800 -460 3 0 {name=C6
 m=1
-value=300pf
+value=50pF
 footprint=1206
 device="ceramic capacitor"}
-C {opin.sym} 1040 -667.5 0 0 {name=p11 lab=Vop}
-C {opin.sym} 1040 -643.75 2 1 {name=p12 lab=Vom}
+C {opin.sym} 1160 -667.5 0 0 {name=p11 lab=Vop}
+C {opin.sym} 1160 -643.75 2 1 {name=p12 lab=Vom}
 C {lab_pin.sym} 720 -615 0 0 {name=p23 sig_type=std_logic lab=VSS}
 C {lab_pin.sym} 720 -690 0 0 {name=p24 sig_type=std_logic lab=VDD}
 C {lab_pin.sym} 410 -230 3 0 {name=p38 sig_type=std_logic lab=VSS}
@@ -269,7 +273,7 @@ C {lab_pin.sym} -970 -700 1 0 {name=p29 sig_type=std_logic lab=Vin+}
 C {lab_pin.sym} -750 -700 1 0 {name=p30 sig_type=std_logic lab=Vin-}
 C {lab_pin.sym} -530 -700 1 0 {name=p31 sig_type=std_logic lab=clk1}
 C {lab_pin.sym} -270 -700 1 0 {name=p32 sig_type=std_logic lab=clk2}
-C {devices/code_shown.sym} 1491.25 -1093.75 0 0 {name=NGSPICE only_toplevel=true
+C {devices/code_shown.sym} 1821.25 -1053.75 0 0 {name=NGSPICE only_toplevel=true
 value="
 .lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
 .inc /foss/pdks/gf180mcuD/libs.tech/ngspice/design.ngspice
@@ -290,7 +294,7 @@ Rd2 clk2  0 1meg
 .control
 set color0=white
 set color1=black
-tran 2n 100u
+tran 2n 200u
 let vicm_ota = (v(Vp)+v(Vm))/2
 let vid_ota  = v(Vp)-v(Vm)
 * --- window ala paper ---
@@ -312,13 +316,25 @@ C {lab_pin.sym} -970 -450 1 0 {name=p35 sig_type=std_logic lab=VCM}
 C {lab_pin.sym} 230 -1070 1 0 {name=p36 sig_type=std_logic lab=VCM}
 C {lab_pin.sym} 230 -230 3 0 {name=p21 sig_type=std_logic lab=VCM}
 C {fully_differential_amplifier/fullydiffamp.sym} 780 -565 0 0 {name=x1}
-C {capa.sym} 962.5 -643.75 3 0 {name=C2
+C {capa.sym} 1100 -697.5 0 0 {name=C2
 m=1
-value=10pf
+value=0.53nF
 footprint=1206
 device="ceramic capacitor"}
-C {capa.sym} 962.5 -667.5 3 0 {name=C4
+C {capa.sym} 1100 -613.75 0 0 {name=C4
 m=1
-value=10pf
+value=0.53nF
 footprint=1206
 device="ceramic capacitor"}
+C {lab_pin.sym} 1100 -727.5 1 0 {name=p22 sig_type=std_logic lab=VSS}
+C {lab_pin.sym} 1100 -583.75 3 0 {name=p37 sig_type=std_logic lab=VSS}
+C {res.sym} 1070 -643.75 1 0 {name=R1
+value=1k
+footprint=1206
+device=resistor
+m=1}
+C {res.sym} 1070 -667.5 3 0 {name=R2
+value=1k
+footprint=1206
+device=resistor
+m=1}
