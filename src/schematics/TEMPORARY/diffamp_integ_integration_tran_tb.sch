@@ -140,7 +140,7 @@ spiceprefix=X
 }
 C {capa.sym} 290 -850 1 1 {name=C1
 m=1
-value=50f
+value=50nf
 footprint=1206
 device="ceramic capacitor"}
 C {ipin.sym} 30 -850 0 0 {name=p3 lab=Vin+}
@@ -204,7 +204,7 @@ spiceprefix=X
 }
 C {capa.sym} 290 -470 1 0 {name=C3
 m=1
-value=50f
+value=50nf
 footprint=1206
 device="ceramic capacitor"}
 C {ipin.sym} 30 -470 2 1 {name=p6 lab=Vin-}
@@ -222,12 +222,12 @@ C {lab_pin.sym} 190 -300 2 0 {name=p19 sig_type=std_logic lab=VSS}
 C {lab_pin.sym} 350 -300 0 0 {name=p20 sig_type=std_logic lab=VSS}
 C {capa.sym} 730 -850 3 0 {name=C5
 m=1
-value=300f
+value=150nf
 footprint=1206
 device="ceramic capacitor"}
 C {capa.sym} 750 -470 3 0 {name=C6
 m=1
-value=300f
+value=150nf
 footprint=1206
 device="ceramic capacitor"}
 C {opin.sym} 990 -677.5 0 0 {name=p11 lab=Vop}

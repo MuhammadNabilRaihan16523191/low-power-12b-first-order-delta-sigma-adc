@@ -52,8 +52,8 @@ value="
 .param VBIASN_VAL=0.65
 .param VBIASP_VAL=2.5
 .param CL=0.5p
-.param Wp=20u
-.param Wn=10u
+.param Wp=18u
+.param Wn=9u
 .param Kall=1.25u
 
 .temp 27
@@ -166,7 +166,7 @@ meas ac dcgain   FIND gain_db   AT=10
 meas ac gbw      WHEN gain_db=0 FALL=1
 meas ac ph_at_0  FIND phase_deg WHEN gain_db=0 FALL=1
 let pm = 180 + ph_at_0
-let f3db = dcgain/sqrt(2)
+let f3db = dcgain-3
 meas ac bw WHEN gain_db=f3db FALL=1
 echo ===== AC RESULTS =====
 print dcgain
