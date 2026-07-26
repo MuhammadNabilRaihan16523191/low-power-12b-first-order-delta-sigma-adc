@@ -21,6 +21,7 @@
 
 **Track: A — Foundational Building Blocks** (reusable analog/mixed-signal IP with emphasis on robust verification and reusability)
 
+**NOTE** : For TOP-LEVEL Integration (PARTIAL+WHOLE) Simulation Result + Explanation, **Please see our schematics & simulation review slides**. We detailedly put everything there, and will update the final result here for efficiency.
 ---
 
 ## Functionality and Target Specification
