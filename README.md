@@ -17,11 +17,29 @@
 </p>
 
 **Team A52 — ARNSChips** · Bandung Institute of Technology
+
 [@rafiihsanalfathin123](https://github.com/rafiihsanalfathin123) (lead) · [@MuhammadNabilRaihan16523191](https://github.com/MuhammadNabilRaihan16523191) · [@angelinaaw](https://github.com/angelinaaw) · [@Putradika-118](https://github.com/Putradika-118) · [@bukananda](https://github.com/bukananda)
 
 **Track: A — Foundational Building Blocks** (reusable analog/mixed-signal IP with emphasis on robust verification and reusability)
 
-**NOTE** : For TOP-LEVEL Integration (PARTIAL+WHOLE) Simulation Result + Explanation, **Please see our schematics & simulation review slides**. We detailedly put everything there, and will update the final result here for efficiency.
+> **Note:** For top-level integration (partial + whole) simulation results and explanation, please see our **Schematic & Simulation Review slides** (linked below). Everything is documented there in detail; the final results will be mirrored here once complete.
+
+---
+
+## Documentation
+
+<div align="center">
+
+| Document | Link |
+|---|---|
+| 📑 Proposal slides | [Google Slides](https://docs.google.com/presentation/d/1M62LnVBDNp1b1XSa8lMKlhMRepqvPYP2gsCC-x1C1OA/edit?usp=sharing) |
+| 📊 Schematic & Simulation Review slides | [Google Slides](https://docs.google.com/presentation/d/187ljcCqn_6bcYCcDN7YLW98l-vFT65xJHFSj8pB5ziU/edit?slide=id.g3ed01995daf_2_93#slide=id.g3ed01995daf_2_93) |
+| 🎬 Schematic Review video | [Google Drive](https://drive.google.com/file/d/1ZalpSG7483_RGrQqDSEjqazJp0OSJbgO/view?usp=drivesdk) |
+| 📈 Progress tracker (live) | [Google Sheets](https://docs.google.com/spreadsheets/d/1vq9HZ6a_NoaJxv5bcDqT_2UIH9_rgmeoz8I_xhGFr9E/edit?gid=690406390#gid=690406390) |
+| 🧾 Team project issue | [sscs-chipathon-2026 #156](https://github.com/sscs-ose/sscs-chipathon-2026/issues/156) |
+
+</div>
+
 ---
 
 ## Functionality and Target Specification
@@ -45,14 +63,16 @@ The single-bit architecture is chosen because its two-level feedback DAC is **in
 | Input | fully diff., VCM 1.65 V | max swing on 3.3 V rail; CM rejection | .op + transient |
 | References | VREF± = 3.3 / 0 V | rail-to-rail TG DAC, no headroom loss | **DAC TB ✓ PASS** |
 | Power (total) | < 3 mW | OTA 1.572 mW measured + budget for rest | per-block power sims |
-| Area / pins | ~500×500 µm · ~15 pins | padring allocation ([issue #156](https://github.com/sscs-ose/sscs-chipathon-2026/issues/156)) | layout phase |
+| Area / pins | ~500×500 µm · 11 pins | padring allocation ([issue #156](https://github.com/sscs-ose/sscs-chipathon-2026/issues/156)) | layout phase |
 | Robustness | TT/SS/FF · −40…125 °C · VDD±10 % | industrial range plan | corners pending |
 
 </div>
 
 > Peak SQNR of an ideal 1st-order 1-bit modulator: `SQNR = 6.02·N + 1.76 − 5.17 + 30·log10(OSR)` [4] → 74.9 dB (ENOB ≈ 12.1 b) at OSR = 256, giving ~10 dB of implementation margin over the >65 dB target.
 
-## Block Diagram & Pinouts
+---
+
+## Block Diagram & Pinout
 
 <p align="center">
   <img src="docs/images/Block_Diagram_System_Final.jpg" alt="Low-Power 12-Bit First-Order Delta-Sigma ADC — System Block Diagram" width="850"/>
@@ -70,7 +90,7 @@ The single-bit architecture is chosen because its two-level feedback DAC is **in
 | Latched Comparator | 1-bit quantizer: clocked polarity decision on the integrator output → PDM bitstream | ★★★☆☆ | Wp/Wn = 2:1, L = 1 µm > Lmin for low offset; metastable "floating zone" identified and narrowed; decision time re-target at fs |
 | 1-bit Feedback DAC | Converts the bitstream back to VREF+/VREF− into the integrator summing path | ★★☆☆☆ | **Verified ✓** (Rds 800 Ω, leakage 5.22 pA, delay 6.07 ns, 0.455 µW); TG chosen over inverter for rail-to-rail levels + isolation |
 | CIC Decimation Filter (digital) | 3rd-order CIC: removes out-of-band shaped noise and decimates ÷256 → 12-bit PCM @ 48 kS/s | ★★★☆☆ | Multiplier-free; 25-bit internal bus (overflow-free by construction), truncation [24:13]; iverilog-verified; LibreLane config + SDC ready |
-| Clock Phases (CLK1/CLK2/CLK2B) | Non-overlapping sampling/integration phases + complement for transmission gates | ★☆☆☆☆ | Generated off-chip for this tapeout; on-chip non-overlap generator is a stretch goal |
+| Clock Phases | Non-overlapping sampling/integration phases derived from the single CLK input | ★☆☆☆☆ | Non-overlap Φ1/Φ2 (+ complement for transmission gates); generated off-chip for this tapeout, on-chip generator is a stretch goal |
 
 </div>
 
@@ -91,16 +111,18 @@ The single-bit architecture is chosen because its two-level feedback DAC is **in
 | 7 | IN+ | Analog | Input | Differential analog input, positive (centered at 1.65 V CM) |
 | 8 | IN− | Analog | Input | Differential analog input, negative |
 | 9 | OUT | Digital | Output | 1-bit ΣΔ PDM bitstream (12-bit PCM available from on-chip CIC) |
-| 10 | CLK | Analog | Input | Sampling-phase clock Φ1 (non-overlapping with Φ2), 12.288 MHz domain |
+| 10 | CLK | Analog | Input | Master sampling clock, 12.288 MHz; on-chip non-overlapping phases derived from it |
 | 11 | RST | Digital | Input | Reset for the digital decimation filter (active-low inside RTL) |
 
 </div>
 
-*Pin types/directions follow the team [pin-requirement sheet](https://docs.google.com/spreadsheets/d/1fF8oxbtLJM7w2VgKkdR7hZ5m95WEj2S6m3JAmWGvgTE/edit?gid=0#gid=0); clock pins are typed "Analog" because they directly drive the analog switch network. Power/clock domains: single 3.3 V level (no level shifters), AVDD/DVDD separated at the padring for isolation; fs = 12.288 MHz and the on-chip synchronous ÷256 domain (48 kHz) are declared in the SDC.*
+*Pin types/directions follow the team [pin-requirement sheet](https://docs.google.com/spreadsheets/d/1fF8oxbtLJM7w2VgKkdR7hZ5m95WEj2S6m3JAmWGvgTE/edit?gid=0#gid=0); the CLK pin is typed "Analog" because it directly drives the analog switch network. Power/clock domains: single 3.3 V level (no level shifters), AVDD/DVDD separated at the padring for isolation; fs = 12.288 MHz and the on-chip synchronous ÷256 domain (48 kHz) are declared in the SDC.*
+
+---
 
 ## Component Specification
 
-Each block lives in its own folder with the schematic (`.sch`), symbol (`.sym`), testbench, and a **progress-log README** containing target specs, design decisions, simulation methodology, and results. (Detailed Specification, tabulated in Folder*)
+Each block lives in its own folder with the schematic (`.sch`), symbol (`.sym`), testbench, and a **progress-log README** containing target specs, design decisions, simulation methodology, and results (detailed specifications tabulated in each folder).
 
 <div align="center">
 
@@ -124,19 +146,7 @@ Each block lives in its own folder with the schematic (`.sch`), symbol (`.sym`),
 
 **CIC Decimation Filter** — 3rd-order Hogenauer CIC [5]: three integrators at fs, ÷256 clock divider, three differentiators at fs/256; 25-bit internal width (1 + 3·log₂256) guarantees overflow-free two's-complement operation; output truncated at [24:13] to 12-bit PCM at 48 kS/s. Unit and full-filter simulations pass in Icarus Verilog; OpenROAD/LibreLane configuration and 81.38 ns SDC are in place for synthesis and STA.
 
-## Other Documentation
-
-<div align="center">
-
-| Document | Link |
-|---|---|
-| 📑 Proposal slides | [Google Slides](https://docs.google.com/presentation/d/1M62LnVBDNp1b1XSa8lMKlhMRepqvPYP2gsCC-x1C1OA/edit?usp=sharing) |
-| 📊 Schematic & Simulation Review slides | [Google Slides](https://docs.google.com/presentation/d/187ljcCqn_6bcYCcDN7YLW98l-vFT65xJHFSj8pB5ziU/edit?slide=id.g3ed01995daf_2_93#slide=id.g3ed01995daf_2_93) |
-| 🎬 Schematic Review video | [Google Drive](https://drive.google.com/file/d/1ZalpSG7483_RGrQqDSEjqazJp0OSJbgO/view?usp=drivesdk) |
-| 📈 Progress tracker (live) | [Google Sheets](https://docs.google.com/spreadsheets/d/1vq9HZ6a_NoaJxv5bcDqT_2UIH9_rgmeoz8I_xhGFr9E/edit?gid=690406390#gid=690406390) |
-| 🧾 Team project issue | [sscs-chipathon-2026 #156](https://github.com/sscs-ose/sscs-chipathon-2026/issues/156) |
-
-</div>
+---
 
 ## References
 
