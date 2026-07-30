@@ -50,16 +50,9 @@ C {vsource.sym} 250 75 0 0 {name=V4 value="dc \{VBIASN_VAL\}" savecurrent=false}
 C {vsource.sym} 400 80 0 0 {name=V5 value="dc \{VBIASP_VAL\}" savecurrent=false}
 C {gnd.sym} 250 115 0 0 {name=l7 lab=GND}
 C {gnd.sym} 400 120 0 0 {name=l8 lab=GND}
-C {devices/code_shown.sym} -1388.75 -808.75 0 0 {name=NGSPICE only_toplevel=true
+C {devices/code_shown.sym} -978.75 -458.75 0 0 {name=NGSPICE only_toplevel=true
 value="
-* =====================================================
-* 1. GF180 MODEL
-* =====================================================
-.lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
-.inc /foss/pdks/gf180mcuD/libs.tech/ngspice/design.ngspice
-
-* =====================================================
-* 2. PARAMETERS
+*PARAMETERS
 * =====================================================
 .param VDDVAL=3.3
 .param VCM=1.65
@@ -69,40 +62,26 @@ value="
 .param Wp=12u
 .param Wn=6u
 .param Kall=1.28u
+.param Gcm = 10u
 .option reltol=1e-4 abstol=1e-12 vntol=1e-6 temp=27
 
-* =====================================================
-* 3. LOAD & LEAKAGE
+* LOAD, LEAKAGE, CMFB
 * =====================================================
 CLP Vop 0 \{CL\}
 CLM Vom 0 \{CL\}
 RLEAKP Vop 0 1T
 RLEAKM Vom 0 1T
-
-* =====================================================
-* 4. IDEAL CMFB
-* =====================================================
-.param Gcm = 10u
 Bcm_sense vcm_sns 0 V=\{ (v(Vop)+v(Vom))/2 \}
 Gcmfb_p  0 Vop  vcm_sns vcm_ref  \{Gcm\}
 Gcmfb_m  0 Vom  vcm_sns vcm_ref  \{Gcm\}
 Vcm_ref  vcm_ref 0  DC \{VCM\}
 
-* =====================================================
-* 5. CONTROL BLOCK (ANALYSIS)
+* SIMULATION
 * =====================================================
 .control
-* Wajib menyimpan parameter internal sebelum analisis jalan
 save all
-save @m.x1.xm7.m0[id] @m.x1.xm7.m0[gm] @m.x1.xm7.m0[gds] @m.x1.xm7.m0[vgs] @m.x1.xm7.m0[vds] @m.x1.xm7.m0[vdsat]
 
-echo ==========================================
-echo OTA VERIFICATION START
-echo ==========================================
-
-* -----------------------------------------------------
 * OP ANALYSIS (DC Bias & Sizing Validation)
-* -----------------------------------------------------
 echo ===== DC OPERATING POINT =====
 op
 
@@ -110,57 +89,8 @@ op
 let vocm = (v(Vop)+v(Vom))/2
 let vod = v(Vop)-v(Vom)
 
-echo ====================================================
-echo   AUDIT OPERATING POINT TRANSISTOR XM1 - XM14 (X2)  
-echo ====================================================
-  
-echo --- TRANSISTOR XM1 - XM5 ---
-show m.x1.xm1.m0  : vds vdsat gm gds id
-show m.x1.xm2.m0  : vds vdsat gm gds id
-show m.x1.xm3.m0  : vds vdsat gm gds id
-show m.x1.xm4.m0  : vds vdsat gm gds id
-show m.x1.xm5.m0  : vds vdsat gm gds id
-  
-echo --- TRANSISTOR XM6 - XM10 ---
-show m.x1.xm6.m0  : vds vdsat gm gds id
-show m.x1.xm7.m0  : vds vdsat gm gds id
-show m.x1.xm8.m0  : vds vdsat gm gds id
-show m.x1.xm9.m0  : vds vdsat gm gds id
-show m.x1.xm10.m0 : vds vdsat gm gds id
-  
-echo --- TRANSISTOR XM11 - XM14 ---
-show m.x1.xm11.m0 : vds vdsat gm gds id
-show m.x1.xm12.m0 : vds vdsat gm gds id
-show m.x1.xm13.m0 : vds vdsat gm gds id
-show m.x1.xm14.m0 : vds vdsat gm gds id
 
-echo ====================================================
-
-* Ekstraksi Parameter Transistor Input (XM7)
-let id_m7 = @m.x1.xm7.m0[id]
-let gm_m7 = @m.x1.xm7.m0[gm]
-let gds_m7 = @m.x1.xm7.m0[gds]
-let vgs_m7 = @m.x1.xm7.m0[vgs]
-let vds_m7 = @m.x1.xm7.m0[vds]
-let vdsat_m7 = @m.x1.xm7.m0[vdsat]
-let gm_id = gm_m7 / id_m7
-let intrinsic_gain = gm_m7 / gds_m7
-
-echo --- Output Voltages ---
-print v(VDD) v(Vbiasp) v(Vbiasn) v(Vop) v(Vom) vocm vod
-let pwr = -i(V3)*v(VDD)
-print pwr
-
-echo --- XM7 Parameters (Input Pair) ---
-print id_m7 gm_m7 gds_m7 vgs_m7 vds_m7 vdsat_m7 gm_id intrinsic_gain
-
-* Simpan khusus hasil DC agar raw file rapi
-write ota_op.raw v(Vop) v(Vom) vocm vod id_m7 gm_m7 gds_m7 vgs_m7 vds_m7 vdsat_m7 gm_id intrinsic_gain
-
-
-* -----------------------------------------------------
 * TRANSIENT ANALYSIS
-* -----------------------------------------------------
 echo ===== TRANSIENT =====
 tran 1n 8u
 let vout_diff_tran = v(Vop)-v(Vom)
@@ -169,9 +99,6 @@ plot vout_diff_tran
 plot v(Vop) v(Vom)
 
 write ota_tran.raw v(Vop) v(Vom) vout_diff_tran
-echo ==========================================
-echo FINISHED! BUKA .RAW FILE DI GAW
-echo ==========================================
 .endc
 "}
 C {lab_wire.sym} 330 -42.5 0 1 {name=p1 sig_type=std_logic lab=vop}
@@ -206,3 +133,7 @@ m=1}
 C {fully_differential_amplifier/fullydiffamp.sym} 270 60 0 0 {name=x1}
 C {lab_pin.sym} -250 90 0 0 {name=p5 sig_type=std_logic lab=Vin-}
 C {lab_pin.sym} 15 100 0 0 {name=p6 sig_type=std_logic lab=Vin+}
+C {code_shown.sym} -410 -450 0 0 {name=MODELS only_toplevel=false value=" 
+.lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
+.inc /foss/pdks/gf180mcuD/libs.tech/ngspice/design.ngspice
+"}
