@@ -98,6 +98,23 @@ plot v(Vin-) v(Vin+)
 plot vout_diff_tran
 plot v(Vop) v(Vom)
 
+* --- swing & final value ---
+meas tran vout_max MAX vout_diff_tran
+meas tran vout_min MIN vout_diff_tran
+let vout_swing = vout_max - vout_min
+meas tran vfinal FIND vout_diff_tran AT=2.4u
+
+* --- slew rate (10%-90% pada transisi naik pertama) ---
+let v10 = vout_min + 0.1*vout_swing
+let v90 = vout_min + 0.9*vout_swing
+meas tran t10 WHEN vout_diff_tran=v10 RISE=1
+meas tran t90 WHEN vout_diff_tran=v90 RISE=1
+
+let slew_rate = vout_swing/(t90-t10)
+* --- settling time ke dalam 1% dari nilai akhir ---
+let vset_hi = vfinal + 0.01*vout_swing
+meas tran tset WHEN vout_diff_tran=vset_hi RISE=1
+print vout_swing slew_rate tset
 write ota_tran.raw v(Vop) v(Vom) vout_diff_tran
 .endc
 "}
