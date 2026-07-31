@@ -36,16 +36,9 @@ C {gnd.sym} 110 115 0 0 {name=l7 lab=GND}
 C {gnd.sym} 250 130 0 0 {name=l8 lab=GND}
 C {noconn.sym} 205 -42.5 0 1 {name=l9}
 C {noconn.sym} 206.25 -18.75 0 1 {name=l10}
-C {devices/code_shown.sym} -1388.75 -793.75 0 0 {name=NGSPICE only_toplevel=true
+C {devices/code_shown.sym} -1398.75 -713.75 0 0 {name=NGSPICE only_toplevel=true
 value="
-* =====================================================
-* 1. GF180 MODEL
-* =====================================================
-.lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
-.inc /foss/pdks/gf180mcuD/libs.tech/ngspice/design.ngspice
-
-* =====================================================
-* 2. PARAMETERS
+*PARAMETERS
 * =====================================================
 .param VDDVAL=3.3
 .param VCM=1.65
@@ -55,145 +48,102 @@ value="
 .param Wp=18u
 .param Wn=9u
 .param Kall=1.25u
-
+.param Gcm = 1m
 .temp 27
 .option reltol=1e-4 abstol=1e-12 vntol=1e-6
 
-* =====================================================
-* 3. LOAD & LEAKAGE
+* LOAD,LEAKAGE,CMFB
 * =====================================================
 CLP Vop 0 \{CL\}
 CLM Vom 0 \{CL\}
 RLEAKP Vop 0 1T
 RLEAKM Vom 0 1T
-
-* =====================================================
-* 4. IDEAL CMFB
-* =====================================================
-.param Gcm = 1m
 Bcm_sense vcm_sns 0 V=\{ (v(Vop)+v(Vom))/2 \}
 Gcmfb_p  0 Vop  vcm_sns vcm_ref  \{Gcm\}
 Gcmfb_m  0 Vom  vcm_sns vcm_ref  \{Gcm\}
 Vcm_ref  vcm_ref 0  DC \{VCM\}
 
-* =====================================================
-* 5. CONTROL BLOCK (ANALYSIS)
+* SIMULATION
 * =====================================================
 .control
-set color0=white
-set color1=black
-set color2=red     $ Mengubah warna garis gelombang 2
-set color3=blue    $ Mengubah warna garis gelombang 1
-set xbrushwidth=2  $ Menebalkan garis gelombang agar jelas untuk laporan
-* Wajib menyimpan parameter internal sebelum analisis jalan
 save all
 save @m.x1.xm7.m0[id] @m.x1.xm7.m0[gm] @m.x1.xm7.m0[gds] @m.x1.xm7.m0[vgs] @m.x1.xm7.m0[vds] @m.x1.xm7.m0[vdsat]
 
-echo ==========================================
-echo OTA VERIFICATION START
-echo ==========================================
-
-* -----------------------------------------------------
 * OP ANALYSIS (DC Bias & Sizing Validation)
-* -----------------------------------------------------
 echo ===== DC OPERATING POINT =====
 op
-
-* Kalkulasi Variabel Makro
 let vocm = (v(Vop)+v(Vom))/2
 let vod = v(Vop)-v(Vom)
 
-echo ====================================================
 echo   AUDIT OPERATING POINT TRANSISTOR XM1 - XM14 (X2)  
 echo ====================================================
-  
 echo --- TRANSISTOR XM1 - XM5 ---
 show m.x1.xm1.m0  : vds vdsat gm gds id
 show m.x1.xm2.m0  : vds vdsat gm gds id
 show m.x1.xm3.m0  : vds vdsat gm gds id
 show m.x1.xm4.m0  : vds vdsat gm gds id
 show m.x1.xm5.m0  : vds vdsat gm gds id
-  
 echo --- TRANSISTOR XM6 - XM10 ---
 show m.x1.xm6.m0  : vds vdsat gm gds id
 show m.x1.xm7.m0  : vds vdsat gm gds id
 show m.x1.xm8.m0  : vds vdsat gm gds id
 show m.x1.xm9.m0  : vds vdsat gm gds id
 show m.x1.xm10.m0 : vds vdsat gm gds id
-  
 echo --- TRANSISTOR XM11 - XM14 ---
 show m.x1.xm11.m0 : vds vdsat gm gds id
 show m.x1.xm12.m0 : vds vdsat gm gds id
 show m.x1.xm13.m0 : vds vdsat gm gds id
 show m.x1.xm14.m0 : vds vdsat gm gds id
-
 echo ====================================================
 
 * Ekstraksi Parameter Transistor Input (XM7)
 let id_m7 = @m.x1.xm7.m0[id]
 let gm_m7 = @m.x1.xm7.m0[gm]
 let gds_m7 = @m.x1.xm7.m0[gds]
-let vgs_m7 = @m.x1.xm7.m0[vgs]
-let vds_m7 = @m.x1.xm7.m0[vds]
-let vdsat_m7 = @m.x1.xm7.m0[vdsat]
 let gm_id = gm_m7 / id_m7
 let intrinsic_gain = gm_m7 / gds_m7
 
-echo --- Output Voltages ---
+echo --- Output Voltages & Input Pair Parameters ---
 print v(VDD) v(Vbiasp) v(Vbiasn) v(Vop) v(Vom) vocm vod
 let pwr = -i(V3)*v(VDD)
 print pwr
-echo --- XM7 Parameters (Input Pair) ---
-print id_m7 gm_m7 gds_m7 vgs_m7 vds_m7 vdsat_m7 gm_id intrinsic_gain
-
-* Simpan khusus hasil DC agar raw file rapi
+print gm_id intrinsic_gain
 write ota_op.raw v(Vop) v(Vom) vocm vod id_m7 gm_m7 gds_m7 vgs_m7 vds_m7 vdsat_m7 gm_id intrinsic_gain
 
-* -----------------------------------------------------
 * AC ANALYSIS (Bode Plot)
-* -----------------------------------------------------
-echo ===== AC ANALYSIS =====
 ac dec 100 1 10G
 
 let vout_diff = v(Vop)-v(Vom)
 let gain_db = db(vout_diff)
 let phase_deg = 180/PI * cph(vout_diff)
-
 plot db(vout_diff)
 plot phase_deg
-* --- automatic spec extraction (like Pretl TB) ---
 meas ac dcgain   FIND gain_db   AT=10
 meas ac gbw      WHEN gain_db=0 FALL=1
 meas ac ph_at_0  FIND phase_deg WHEN gain_db=0 FALL=1
 let pm = 180 + ph_at_0
 let f3db = dcgain-3
 meas ac bw WHEN gain_db=f3db FALL=1
+
 echo ===== AC RESULTS =====
 print dcgain
 print bw
 print gbw
 print pm
-echo (target: dcgain>=63dB, gbw>=400MHz, pm>=60deg)
+echo (target: dcgain>=65dB, gbw>=100MHz, pm>=60deg)
 write ota_ac.raw gain_db phase_deg vout_diff
 
-
-* -----------------------------------------------------
 * NOISE ANALYSIS
 * -----------------------------------------------------
 echo ===== INPUT REFERRED NNOISE =====
 noise v(Vop, Vom) V1 dec 20 1k 100Meg
 
-* Set plot ke noise1 agar onoise_spectrum bisa disimpan dengan benar
 setplot noise1
 let inoise_rms = sqrt(integ(inoise_spectrum))
 print inoise_rms
 plot inoise_rms
 plot inoise_spectrum
 write ota_noise.raw onoise_spectrum inoise_spectrum
-
-echo ==========================================
-echo FINISHED! BUKA .RAW FILE DI GAW
-echo ==========================================
 .endc
 "}
 C {lab_wire.sym} 190 -42.5 0 1 {name=p1 sig_type=std_logic lab=vop}
@@ -201,3 +151,6 @@ C {lab_wire.sym} 190 -18.75 0 1 {name=p2 sig_type=std_logic lab=vom}
 C {lab_wire.sym} 142.5 22.5 0 1 {name=p3 sig_type=std_logic lab=vbiasp}
 C {lab_wire.sym} 110 37.5 0 1 {name=p4 sig_type=std_logic lab=vbiasn}
 C {fully_differential_amplifier/fullydiffamp.sym} 130 60 0 0 {name=x1}
+C {code_shown.sym} 400 -20 0 0 {name=MODELS only_toplevel=false value="
+.lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
+.inc /foss/pdks/gf180mcuD/libs.tech/ngspice/design.ngspice"}
