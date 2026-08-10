@@ -1,0 +1,17 @@
+* NGSPICE file created from VREF_SELECTOR_BUFFER$10.ext - technology: gf180mcuD
+
+.subckt VREF_SELECTOR_BUFFER VDD VSS VIN VREFP VREFN VOUT
+X4 a_3968_1632# VIN VDD VDD pfet_03v3 ad=3.75p pd=11.5u as=3.75p ps=11.5u w=5u l=0.28u
+X6 a_7487_n233# VIN VREFN VSS nfet_03v3 ad=0.215p pd=1.36u as=0.375p ps=2.5u w=0.5u l=0.28u
+X8 VOUT a_7487_n233# VSS VSS nfet_03v3 ad=0.375p pd=2.5u as=0.375p ps=2.5u w=0.5u l=0.28u
+X12 a_7487_n233# VIN VREFP VDD pfet_03v3 ad=2.15p pd=5.86u as=3.75p ps=11.5u w=5u l=0.28u
+X13 VOUT a_7487_n233# VDD VDD pfet_03v3 ad=3.75p pd=11.5u as=3.75p ps=11.5u w=5u l=0.28u
+X14 a_7487_n233# a_3968_1632# VREFP VSS nfet_03v3 ad=0.215p pd=1.36u as=0.375p ps=2.5u w=0.5u l=0.28u
+X16 VREFN a_3968_1632# a_7487_n233# VDD pfet_03v3 ad=3.75p pd=11.5u as=2.15p ps=5.86u w=5u l=0.28u
+X18 VREFP VIN a_7487_n233# VDD pfet_03v3 ad=3.75p pd=11.5u as=2.15p ps=5.86u w=5u l=0.28u
+X20 VREFP a_3968_1632# a_7487_n233# VSS nfet_03v3 ad=0.375p pd=2.5u as=0.215p ps=1.36u w=0.5u l=0.28u
+X24 a_7487_n233# a_3968_1632# VREFN VDD pfet_03v3 ad=2.15p pd=5.86u as=3.75p ps=11.5u w=5u l=0.28u
+X25 a_3968_1632# VIN VSS VSS nfet_03v3 ad=0.375p pd=2.5u as=0.375p ps=2.5u w=0.5u l=0.28u
+X26 VREFN VIN a_7487_n233# VSS nfet_03v3 ad=0.375p pd=2.5u as=0.215p ps=1.36u w=0.5u l=0.28u
+.ends
+
