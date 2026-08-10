@@ -1,9 +1,8 @@
-v {xschem version=3.4.8RC file_version=1.3}
+v {xschem version=3.4.7 file_version=1.2}
 G {}
 K {}
 V {}
 S {}
-F {}
 E {}
 N -80 -1151.25 -80 -1011.25 {lab=#net1}
 N -120 -1011.25 -80 -1011.25 {lab=#net1}
@@ -324,8 +323,8 @@ value="
 .param Wn=6u
 .param Kall=1.28u
 .param Wpc=5u Wnc=2.5u Wsc=2*Wp Lc=0.3u
-.param Wsp_p=5u Wsn_p=0.3u Ld=0.3u Wdp_p=20u Wdn_p=0.3u Wsp2_p=5u Wsn2_p=0.3u
-.param Wsp_m=5u Wsn_m=0.3u Wdp_m=5u Wdn_m=0.3u
+.param Wsp_p=5u Wsn_p=0.3u Ld=0.3u Wdp_p=40u Wdn_p=0.6u Wsp2_p=5u Wsn2_p=0.3u
+.param Wsp_m=5u Wsn_m=0.5u Wdp_m=10u Wdn_m=1u
 .param Win=1u
 CLP Vop 0 \{CL\}
 CLM Vom 0 \{CL\}
