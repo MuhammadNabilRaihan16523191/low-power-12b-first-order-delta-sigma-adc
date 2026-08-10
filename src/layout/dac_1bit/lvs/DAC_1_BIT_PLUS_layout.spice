@@ -1,0 +1,34 @@
+* NGSPICE file created from DAC_1_BIT_PLUS.ext - technology: gf180mcuD
+
+.subckt nfet_03v3_6AW5NP a_n56_n30# a_n208_n36# a_n346_n177# a_116_n30# a_41_86# a_n131_86#
+X0 a_116_n30# a_41_86# a_n56_n30# a_n346_n177# nfet_03v3 ad=0.1596p pd=1.64u as=94.8f ps=0.92u w=0.3u l=0.3u
+X1 a_n56_n30# a_n131_86# a_n208_n36# a_n346_n177# nfet_03v3 ad=94.8f pd=0.92u as=0.1596p ps=1.64u w=0.3u l=0.3u
+.ends
+
+.subckt pfet_03v3_2HCC33 a_112_n2000# a_n200_n2000# a_36_n2143# a_n52_n2000# w_n362_n2282#
++ a_n127_n2143#
+X0 a_n52_n2000# a_n127_n2143# a_n200_n2000# w_n362_n2282# pfet_03v3 ad=5.2p pd=20.52u as=8.8p ps=40.88u w=20u l=0.3u
+X1 a_112_n2000# a_36_n2143# a_n52_n2000# w_n362_n2282# pfet_03v3 ad=8.8p pd=40.88u as=5.2p ps=20.52u w=20u l=0.3u
+.ends
+
+.subckt pfet_03v3_77EGBB a_n118_n500# a_n45_n644# a_30_n500# w_n280_n782#
+X0 a_30_n500# a_n45_n644# a_n118_n500# w_n280_n782# pfet_03v3 ad=2.2p pd=10.88u as=2.2p ps=10.88u w=5u l=0.3u
+.ends
+
+.subckt nfet_03v3_N4RDNQ a_n43_67# a_30_n30# a_n260_n177# a_n122_n36#
+X0 a_30_n30# a_n43_67# a_n122_n36# a_n260_n177# nfet_03v3 ad=0.1596p pd=1.64u as=0.1596p ps=1.64u w=0.3u l=0.3u
+.ends
+
+.subckt DAC_1_BIT_PLUS VDD VREF+ VIN VOUT VREF- VSS
+XXM1 m1_3480_5000# VREF+ VSS VREF+ m1_2320_6670# m1_2320_6670# nfet_03v3_6AW5NP
+XXM2 VREF+ VREF+ VIN m1_3480_5000# VDD VIN pfet_03v3_2HCC33
+XXM3 m1_3480_5000# VREF- VSS VREF- VIN VIN nfet_03v3_6AW5NP
+XXM4 VREF- VREF- m1_2320_6670# m1_3480_5000# VDD m1_2320_6670# pfet_03v3_2HCC33
+XXM5 VDD VIN m1_2320_6670# VDD pfet_03v3_77EGBB
+XXM6 VIN m1_2320_6670# VSS VSS nfet_03v3_N4RDNQ
+XXM7 VDD m1_3480_5000# m1_6150_5000# VDD pfet_03v3_77EGBB
+XXM9 VDD m1_6150_5000# VOUT VDD pfet_03v3_77EGBB
+XXM8 m1_3480_5000# m1_6150_5000# VSS VSS nfet_03v3_N4RDNQ
+XXM10 m1_6150_5000# VOUT VSS VSS nfet_03v3_N4RDNQ
+.ends
+

@@ -1,0 +1,61 @@
+
+Circuit 1 cell nfet_03v3 and Circuit 2 cell nfet_03v3 are black boxes.
+Warning: Equate pins:  cell nfet_03v3 is a placeholder, treated as a black box.
+Warning: Equate pins:  cell nfet_03v3 is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: nfet_03v3                       |Circuit 2: nfet_03v3                       
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+4                                          |4                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes nfet_03v3 and nfet_03v3 are equivalent.
+
+Circuit 1 cell pfet_03v3 and Circuit 2 cell pfet_03v3 are black boxes.
+Warning: Equate pins:  cell pfet_03v3 is a placeholder, treated as a black box.
+Warning: Equate pins:  cell pfet_03v3 is a placeholder, treated as a black box.
+
+Subcircuit pins:
+Circuit 1: pfet_03v3                       |Circuit 2: pfet_03v3                       
+-------------------------------------------|-------------------------------------------
+1                                          |1                                          
+2                                          |2                                          
+3                                          |3                                          
+4                                          |4                                          
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes pfet_03v3 and pfet_03v3 are equivalent.
+Flattening unmatched subcell nfet_03v3_6AW5NP in circuit DAC_1_BIT_PLUS (0)(2 instances)
+Flattening unmatched subcell pfet_03v3_2HCC33 in circuit DAC_1_BIT_PLUS (0)(2 instances)
+Flattening unmatched subcell pfet_03v3_77EGBB in circuit DAC_1_BIT_PLUS (0)(3 instances)
+Flattening unmatched subcell nfet_03v3_N4RDNQ in circuit DAC_1_BIT_PLUS (0)(3 instances)
+
+Class DAC_1_BIT_PLUS (0):  Merged 4 parallel devices.
+Subcircuit summary:
+Circuit 1: DAC_1_BIT_PLUS                  |Circuit 2: DAC_1_BIT_PLUS                  
+-------------------------------------------|-------------------------------------------
+nfet_03v3 (7->5)                           |nfet_03v3 (5)                              
+pfet_03v3 (7->5)                           |pfet_03v3 (5)                              
+Number of devices: 10                      |Number of devices: 10                      
+Number of nets: 9                          |Number of nets: 9                          
+---------------------------------------------------------------------------------------
+Netlists match uniquely.
+
+Subcircuit pins:
+Circuit 1: DAC_1_BIT_PLUS                  |Circuit 2: DAC_1_BIT_PLUS                  
+-------------------------------------------|-------------------------------------------
+VIN                                        |VIN                                        
+VSS                                        |VSS                                        
+VDD                                        |VDD                                        
+VREF-                                      |VREF-                                      
+VREF+                                      |VREF+                                      
+VOUT                                       |VOUT                                       
+---------------------------------------------------------------------------------------
+Cell pin lists are equivalent.
+Device classes DAC_1_BIT_PLUS and DAC_1_BIT_PLUS are equivalent.
+
+Final result: Circuits match uniquely.
+.
