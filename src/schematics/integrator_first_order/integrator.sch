@@ -59,10 +59,6 @@ N -900 -440 -900 -400 {lab=VDD}
 N -900 -340 -900 -320 {lab=0}
 N -700 -440 -700 -400 {lab=VSS}
 N -700 -340 -700 -320 {lab=0}
-N -490 -440 -490 -400 {lab=Vbiasn}
-N -490 -340 -490 -320 {lab=0}
-N -280 -440 -280 -400 {lab=Vbiasp}
-N -280 -340 -280 -320 {lab=0}
 N -900 -160 -900 -120 {lab=Vin+}
 N -900 -60 -900 -40 {lab=0}
 N -700 -160 -700 -120 {lab=Vin-}
@@ -231,10 +227,6 @@ C {vsource.sym} -900 -370 0 0 {name=V1 value=3.3 savecurrent=false}
 C {gnd.sym} -900 -320 0 0 {name=l5 lab=0}
 C {vsource.sym} -700 -370 0 0 {name=V2 value=0 savecurrent=false}
 C {gnd.sym} -700 -320 0 0 {name=l6 lab=0}
-C {vsource.sym} -490 -370 0 0 {name=V3 value=0.65 savecurrent=false}
-C {gnd.sym} -490 -320 0 0 {name=l7 lab=0}
-C {vsource.sym} -280 -370 0 0 {name=V4 value=2.5 savecurrent=false}
-C {gnd.sym} -280 -320 0 0 {name=l8 lab=0}
 C {vsource.sym} -900 -90 0 0 {name=V5 value="PULSE(-1 1 0 50u 50u 0 100u)" savecurrent=false}
 C {gnd.sym} -900 -40 0 0 {name=l9 lab=0}
 C {vsource.sym} -700 -90 0 0 {name=V6 value="PULSE(-1 1 0 50u 50u 0 100u)" savecurrent=false}
@@ -245,10 +237,6 @@ C {vsource.sym} -280 -90 0 0 {name=V8 value="PULSE(0 3.3 0 1n 1n 0.5u 1u)" savec
 C {gnd.sym} -280 -40 0 0 {name=l12 lab=0}
 C {lab_pin.sym} -900 -440 1 0 {name=p21 sig_type=std_logic lab=VDD}
 C {lab_pin.sym} -700 -440 1 0 {name=p22 sig_type=std_logic lab=VSS
-}
-C {lab_pin.sym} -490 -440 1 0 {name=p23 sig_type=std_logic lab=Vbiasn
-}
-C {lab_pin.sym} -280 -440 1 0 {name=p24 sig_type=std_logic lab=Vbiasp
 }
 C {lab_pin.sym} -900 -160 1 0 {name=p25 sig_type=std_logic lab=Vin+}
 C {lab_pin.sym} -700 -160 1 0 {name=p26 sig_type=std_logic lab=Vin-}
