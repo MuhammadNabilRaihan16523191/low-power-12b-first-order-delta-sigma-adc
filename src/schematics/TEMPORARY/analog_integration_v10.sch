@@ -1,8 +1,9 @@
-v {xschem version=3.4.7 file_version=1.2}
+v {xschem version=3.4.8RC file_version=1.3}
 G {}
 K {}
 V {}
 S {}
+F {}
 E {}
 N -80 -1151.25 -80 -1011.25 {lab=#net1}
 N -120 -1011.25 -80 -1011.25 {lab=#net1}
@@ -277,7 +278,6 @@ C {ipin.sym} 450 -761.25 1 1 {name=p4 lab=Vbiasn}
 C {ipin.sym} 490 -761.25 1 1 {name=p42 lab=Vbiasp}
 C {lab_pin.sym} 320 -841.25 1 0 {name=p33 sig_type=std_logic lab=Vm}
 C {lab_pin.sym} 320 -801.25 3 0 {name=p34 sig_type=std_logic lab=Vp}
-C {fully_differential_amplifier/fullydiffamp.sym} 470 -736.25 0 0 {name=x1}
 C {lab_pin.sym} 942.1875 -861.25 0 0 {name=p46 sig_type=std_logic lab=VDD}
 C {lab_pin.sym} 952.5 -781.25 0 0 {name=p47 sig_type=std_logic lab=VSS}
 C {ipin.sym} 933.4375 -801.5625 2 1 {name=p57 lab=clk2B}
@@ -318,11 +318,12 @@ value="
 .lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
 .inc /foss/pdks/gf180mcuD/libs.tech/ngspice/design.ngspice
 
-.param CL=0.5p
-.param Wp=12u
-.param Wn=6u
-.param Kall=1.28u
-.param Wpc=5u Wnc=2.5u Wsc=2*Wp Lc=0.3u
+.param CL=30f
+.param Wp1=10u Wp2=1u  Wp3=0.25u 
+.param Wn1=10u Wn2=10u Wn3=5u   Wn4=0.25u
+.param Lp1=5u  Lp2=2u  Lp3=50u
+.param Ln1=5u  Ln2=2u  Ln3=0.5u   Ln4=20u
+.param Wpc=5u Wnc=2.5u Wsc=2*Wpc Lc=0.3u
 .param Wsp_p=5u Wsn_p=0.3u Ld=0.3u Wdp_p=40u Wdn_p=0.6u Wsp2_p=5u Wsn2_p=0.3u
 .param Wsp_m=5u Wsn_m=0.5u Wdp_m=10u Wdn_m=1u
 .param Win=1u
@@ -341,6 +342,11 @@ set color1=black
 tran 2n 40u
 let vicm_ota = (v(Vp)+v(Vm))/2
 let vid_ota  = v(Vp)-v(Vm)
+let vocm=(v(Vop)-v(Vom))/2
+let vod=v(Vop)-v(Vom)
+plot vicm_ota vocm
+plot vid_ota vod
+
 * --- window ala paper ---
 *plot v(clk1) v(clk2)          $ window 1: non-overlapping clocks
 *plot v(Vin+)-v(Vin-) v(out2)       $ window 2: input diferensial
@@ -380,3 +386,4 @@ C {noconn.sym} 1670 -683.75 1 0 {name=l19}
 C {vsource.sym} 1270 -673.75 0 0 {name=V16 value=3.3 savecurrent=false}
 C {gnd.sym} 1330 -593.75 0 0 {name=l20 lab=0}
 C {DAC_1_BIT_MIN.sym} 1470 -553.75 0 0 {name=x3}
+C {fully_differential_amplifier/fullydiffamp.sym} 470 -736.25 0 0 {name=x1}
